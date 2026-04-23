@@ -123,3 +123,5 @@ jobs:
           app-name: "miamaiers-reading-buddy-4" # The name of your Azure App Service resource.
           slot-name: "Production" # The deployment slot (Production = the live site).
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }} # The deployment credential, stored as a GitHub secret.
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
