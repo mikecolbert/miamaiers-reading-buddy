@@ -36,21 +36,26 @@ jobs:
       # Without this, the runner has no idea what your project looks like.
       - uses: actions/checkout@v4
 
-      # Step 2: Install Node.js version 22 on the runner.
+      # Step 2: Install pnpm FIRST, before Node.js setup.
+      # pnpm must exist on the runner before setup-node runs, otherwise
+      # setup-node falls back to npm which this project explicitly rejects.
+      # 'run_install: false' prevents pnpm from auto-running install here —
+      # we do that explicitly in Step 4.
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      # Step 3: Install Node.js version 22 on the runner.
+      # Runs AFTER pnpm is installed so setup-node can detect pnpm for caching.
       # Node.js is the JavaScript runtime that powers both the build tools
       # (Vite, esbuild) and the Express server at runtime on Azure.
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-
-      # Step 3: Install pnpm, the package manager this project uses.
-      # pnpm is similar to npm but faster and more efficient with disk space.
-      # It reads pnpm-workspace.yaml to understand the monorepo structure.
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
+          cache: "pnpm"
 
       # Step 4: Install all third-party libraries (dependencies) listed in
       # every package.json file across the monorepo.
