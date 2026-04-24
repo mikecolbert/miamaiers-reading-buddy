@@ -96,9 +96,12 @@ jobs:
       # Push the files to Azure App Service.
       # The publish-profile secret is stored in GitHub repo Settings →
       # Secrets and variables → Actions. It is never stored in code.
+      # startup-command tells Azure how to start the Node.js server.
+      # Without this, Azure shows a default placeholder page.
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'reading-buddy-2'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3370F419EA4E4C149976872D74731CFD }}
+          startup-command: 'node artifacts/api-server/dist/index.mjs'
